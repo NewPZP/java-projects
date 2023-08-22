@@ -49,3 +49,21 @@ CREATE TABLE post_tags (
     tag_id INT REFERENCES tags(id),
     PRIMARY KEY (post_id, tag_id)
 );
+
+CREATE TABLE portfolio (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),  -- 与 users 表关联
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE portfolio_item (
+    id SERIAL PRIMARY KEY,
+    portfolio_id INT REFERENCES portfolio(id),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    media_url VARCHAR(1000),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
