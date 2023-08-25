@@ -1,7 +1,5 @@
 package io.github.newpzp.blog.domain.entity;
 
-
-import java.util.List;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;

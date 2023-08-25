@@ -1,1 +1,11 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/panzhipiao
+        username: postgres
+        password: postgres
+        driver-class-name: org.postgresql.Driver  # 数据库驱动类
 
+    # sql:
+    #     init:
+    #         schema-locations: classpath:sql/init.sql
+    #         mode: always

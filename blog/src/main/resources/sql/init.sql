@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS posts;
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id),
-    category_id INT,
+    category_id INT ,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
