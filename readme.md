@@ -5,6 +5,7 @@
 - mybatis-plus
 - postgresql
 - spring-test
+- modelmapper
 
 
 ## 任务编排管理执行系统
