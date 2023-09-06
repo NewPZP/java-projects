@@ -2,15 +2,17 @@ package io.github.newpzp.blog.service;
 
 import java.util.List;
 
-import io.github.newpzp.blog.domain.dto.PostDTO;
+import io.github.newpzp.blog.domain.dto.CreatePostDTO;
+import io.github.newpzp.blog.domain.dto.PostDetailsDTO;
+import io.github.newpzp.blog.domain.dto.UpdatePostDTO;
 
 public interface PostService {
-    PostDTO getPostById(Long id);
-    List<PostDTO> getPostsByTag(String tagName);
-    List<PostDTO> getPostsByCategory(String categoryName);
-    List<PostDTO> searchPosts(String keyword);
-    List<PostDTO> recentPost(String userId, Integer limit);
-    PostDTO createPost(PostDTO postDTO);
-    PostDTO updatePost(PostDTO postDTO);
+    PostDetailsDTO getPostById(Long id);
+    List<PostDetailsDTO> getPostsByTag(String tagName);
+    List<PostDetailsDTO> getPostsByCategory(String categoryName);
+    List<PostDetailsDTO> searchPosts(String keyword);
+    List<PostDetailsDTO> recentPost(Integer limit);
+    PostDetailsDTO createPost(CreatePostDTO createPostDTO);
+    PostDetailsDTO updatePost(UpdatePostDTO updatePostDTO);
     boolean deletePost(Long id);
 }

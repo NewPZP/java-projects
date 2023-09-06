@@ -9,5 +9,6 @@ public class Tag {
     private Long id;
     private String name;
     
+    
     // Getters, Setters, Constructors
 }
