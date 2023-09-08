@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class UpdatePostDTO {
 
     private Long id;
-    
     private String title;
     private String content;
 

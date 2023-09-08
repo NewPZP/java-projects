@@ -3,16 +3,18 @@ package io.github.newpzp.blog.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import io.github.newpzp.blog.domain.dto.CreatePostDTO;
 import io.github.newpzp.blog.domain.dto.PostDetailsDTO;
+import io.github.newpzp.blog.domain.dto.QueryPostDTO;
 import io.github.newpzp.blog.domain.dto.UpdatePostDTO;
 import io.github.newpzp.blog.domain.entity.Post;
 import io.github.newpzp.blog.domain.entity.PostTag;
@@ -63,7 +65,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public PostDetailsDTO createPost(CreatePostDTO createPostDTO){
+    public boolean createPost(CreatePostDTO createPostDTO){
         Post post = Post.builder()
                         .title(createPostDTO.getTitle())
                         .content(createPostDTO.getContent())
@@ -76,21 +78,52 @@ public class PostServiceImpl implements PostService{
         //TODO: 添加事务处理
         //处理标签
         if(createPostDTO.getTagNames().size() <= 0){
-            return getPostById(post.getId());
+            return true;
         }
-        List<Tag> tags = tagMapper.selectList(new QueryWrapper<Tag>().in("name", createPostDTO.getTagNames()));       
-        List<PostTag> postTag = postTagMapper.selectList(new QueryWrapper<PostTag>().eq("post_id", post.getId()));
-
-        return getPostById(post.getId());
+        for(String tagName:createPostDTO.getTagNames()){
+            if(tagMapper.selectCount(new QueryWrapper<Tag>().eq("name", tagName)) == 0)
+                tagMapper.insert(Tag.builder().name(tagName).build());
+        }
+        List<Tag> tags = tagMapper.selectList(new QueryWrapper<Tag>().in("name", createPostDTO.getTagNames())); 
+        if(tags.size()>0){
+            for(Tag tag:tags){
+                PostTag postTag = PostTag.builder()
+                        .postId(post.getId())
+                        .tagId(tag.getId())
+                        .build();
+                postTagMapper.insert(postTag);
+            }
+        }      
+        return true;
     }
 
     @Override
-    public PostDetailsDTO updatePost(UpdatePostDTO updatePostDTO){
+    public boolean updatePost(UpdatePostDTO updatePostDTO){
         Post post = Post.builder()
+                        .title(updatePostDTO.getTitle())
+                        .content(updatePostDTO.getContent())
+                        .categoryId(updatePostDTO.getCategoryId())
                         .build();
-        //TODO
         postMapper.updateById(post);
-        return getPostById(post.getId());
+        if(updatePostDTO.getTagNames().size() <= 0){
+            return true;
+        }
+
+        for(String tagName:updatePostDTO.getTagNames()){
+            if(tagMapper.selectCount(new QueryWrapper<Tag>().eq("name", tagName)) == 0)
+                tagMapper.insert(Tag.builder().name(tagName).build());
+        }
+        List<Tag> tags = tagMapper.selectList(new QueryWrapper<Tag>().in("name", updatePostDTO.getTagNames())); 
+        if(tags.size()>0){
+            for(Tag tag:tags){
+                PostTag postTag = PostTag.builder()
+                        .postId(post.getId())
+                        .tagId(tag.getId())
+                        .build();
+                postTagMapper.insert(postTag);
+            }
+        }      
+        return true;
     }
     @Override
     public boolean deletePost(Long id){
@@ -100,33 +133,35 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<PostDetailsDTO> getPostsByTag(String tagName) {
+    public Page<PostDetailsDTO> getPostsByTag(QueryPostDTO queryPostDTO) {
+        Page<Post> postPage = new Page<>(queryPostDTO.getCurrent(), queryPostDTO.getOffset());
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                    .like(Objects.nonNull(queryPostDTO.getSearchTxt()), Post::getTitle, queryPostDTO.getSearchTxt())
+                    //.like(Objects.nonNull(queryPostDTO.getSearchTxt()), Post::getContent, queryPostDTO.getSearchTxt())
+                    .ge(Objects.nonNull(queryPostDTO.getCreatedStart()), Post::getCreatedAt, queryPostDTO.getCreatedStart())
+                    .le(Objects.nonNull(queryPostDTO.getCreatedEnd()), Post::getCreatedAt, queryPostDTO.getCreatedEnd())
+                    ;
 
-      
-        Tag tag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("name", tagName));
-        List<PostTag> postTags = postTagMapper.selectList(new QueryWrapper<PostTag>().eq("tag_id", tag.getId()));
-        List<Long> postIds = postTags.stream().map(PostTag::getPostId).collect(Collectors.toList());
-        List<Post> posts = postMapper.selectBatchIds(postIds);
-        // postTags = postTagMapper.selectList(new QueryWrapper<PostTag>().in("post_id", postIds));
-        // String categoryName = categoryMapper.se
-
-        return this.convertToDTOList(posts);
+        postPage = postMapper.selectPage(postPage, queryWrapper);
+        
+        return null;
     }
 
     @Override
-    public List<PostDetailsDTO> getPostsByCategory(String categoryName) {
+    public Page<PostDetailsDTO> getPostsByCategory(QueryPostDTO queryPostDTO) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getPostsByCategory'");
     }
 
     @Override
-    public List<PostDetailsDTO> searchPosts(String keyword) {
+    public Page<PostDetailsDTO> searchPosts(QueryPostDTO queryPostDTO) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'searchPosts'");
     }
 
     @Override
-    public List<PostDetailsDTO> recentPost(Integer limit) {
+    public Page<PostDetailsDTO> recentPost(QueryPostDTO queryPostDTO) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'recentPost'");
     }
