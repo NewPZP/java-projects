@@ -4,6 +4,7 @@ spring:
         username: postgres
         password: postgres
         driver-class-name: org.postgresql.Driver  # 数据库驱动类
+        type: com.zaxxer.hikari.HikariDataSource  # 数据源类型
 
     # sql:
     #     init:

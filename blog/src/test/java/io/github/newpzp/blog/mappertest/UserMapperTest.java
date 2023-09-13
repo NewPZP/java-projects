@@ -26,11 +26,11 @@ public class UserMapperTest {
     @Test
     public void crudTest() {
         // Create
-        // User user = new User();
-        // user.setUsername("testUser");
-        // user.setPassword("testPassword");
-        // user.setEmail("test@email.com");
-        // assertEquals(1, userMapper.insert(user));
+        User user = new User();
+        user.setUsername("testUser");
+        user.setPassword("testPassword");
+        user.setEmail("test@email.com");
+        assertEquals(1, userMapper.insert(user));
 
         // Read
         // User retrievedUser = userMapper.findByUsername("testUser");

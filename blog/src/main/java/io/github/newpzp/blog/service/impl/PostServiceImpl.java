@@ -1,9 +1,7 @@
 package io.github.newpzp.blog.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import io.github.newpzp.blog.domain.dto.CreatePostDTO;
 import io.github.newpzp.blog.domain.dto.PostDetailsDTO;
 import io.github.newpzp.blog.domain.dto.QueryPostDTO;
 import io.github.newpzp.blog.domain.dto.UpdatePostDTO;
-import io.github.newpzp.blog.domain.entity.Category;
 import io.github.newpzp.blog.domain.entity.Post;
 import io.github.newpzp.blog.domain.entity.PostTag;
 import io.github.newpzp.blog.domain.entity.Tag;
@@ -25,28 +22,25 @@ import io.github.newpzp.blog.domain.mapper.PostMapper;
 import io.github.newpzp.blog.domain.mapper.PostTagMapper;
 import io.github.newpzp.blog.domain.mapper.TagMapper;
 import io.github.newpzp.blog.service.PostService;
-import lombok.extern.slf4j.Slf4j;
 
-import static io.github.newpzp.blog.domain.entity.table.PostTableDef.POST;
 import static io.github.newpzp.blog.domain.entity.table.PostTagTableDef.POST_TAG;
 import static io.github.newpzp.blog.domain.entity.table.TagTableDef.TAG;
 
 
-@Service
-@Slf4j
+@Service("postService")
 public class PostServiceImpl implements PostService{
     
     @Autowired
-    private final PostMapper postMapper;
+    private  PostMapper postMapper;
 
     @Autowired
-    private final TagMapper tagMapper;
+    private  TagMapper tagMapper;
 
     @Autowired
-    private final PostTagMapper postTagMapper;
+    private  PostTagMapper postTagMapper;
 
     @Autowired
-    private final CategoryMapper categoryMapper;
+    private  CategoryMapper categoryMapper;
 
 
     @Override
