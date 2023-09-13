@@ -2,18 +2,17 @@ package io.github.newpzp.blog.domain.entity;
 
 import java.time.LocalDateTime;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
+import com.mybatisflex.annotation.Table;
 
 import lombok.Data;
 
-@TableName("users")
+@Table("users")
 @Data
 public class User {
     
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @Id(keyType = KeyType.Auto)    private Long id;
     private String username;
     private String password;  // 注意: 在实际使用中，不要在应用中直接存储或显示真实密码
     private String email;

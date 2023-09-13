@@ -2,19 +2,21 @@ package io.github.newpzp.blog.domain.entity;
 
 import java.time.LocalDateTime;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
+import com.mybatisflex.annotation.Table;
+
 import lombok.Data;
 
-@TableName("comment")
+@Table("comment")
 @Data
 public class Comment {
-    @TableId
+    @Id(keyType = KeyType.Auto)
     private Long id;
-    @TableField("post_id")
+    @Column("post_id")
     private Long postId;
-    @TableField("user_id")
+    @Column("user_id")
     private Long userId;
     private String content;
     

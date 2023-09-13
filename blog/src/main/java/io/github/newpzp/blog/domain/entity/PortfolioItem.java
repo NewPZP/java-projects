@@ -2,25 +2,27 @@ package io.github.newpzp.blog.domain.entity;
 
 import java.time.LocalDateTime;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
+import com.mybatisflex.annotation.Table;
 
 import lombok.Data;
 
 
-@TableName("portfolio_item")
+@Table("portfolio_item")
 @Data
 public class PortfolioItem {
-    @TableId
+
+    @Id(keyType = KeyType.Auto)
     private Long id;
 
-    @TableField("portfolio_id")
+    @Column("portfolio_id")
     private Long portfolioId;
     private String title;
     private String description;
     
-    @TableField("media_url")
+    @Column("media_url")
     private String mediaUrl; // This can be an URL to an image, video or any other media type
     private LocalDateTime createdAt;
     

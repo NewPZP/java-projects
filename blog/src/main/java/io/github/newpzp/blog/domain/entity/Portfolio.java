@@ -1,24 +1,24 @@
 package io.github.newpzp.blog.domain.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
+import com.mybatisflex.annotation.Table;
 
 import lombok.Data;
 
-@TableName("portfolio")
+@Table("portfolio")
 @Data
 public class Portfolio {
-    @TableId
+
+    @Id(keyType = KeyType.Auto)
     private Long id;
     private String title;
     private String description;
     private LocalDateTime createdAt;
 
-    @TableField("urser_id")
+    @Column("urser_id")
     private Long userId; // Assuming the portfolio belongs to a user
     
     // Getters, Setters, Constructors
