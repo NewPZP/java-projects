@@ -77,7 +77,7 @@ public class PostServiceImpl implements PostService{
         postMapper.insert(post);
         //TODO: 添加事务处理
         //处理标签
-        if(createPostDTO.getTagNames().size() <= 0){
+        if(createPostDTO.getTagNames()==null || createPostDTO.getTagNames().size() <= 0){
             return true;
         }
         for(String tagName:createPostDTO.getTagNames()){
