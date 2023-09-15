@@ -11,11 +11,9 @@ import io.github.newpzp.blog.service.PostService;
 @RequestMapping("/post")
 public class PostController{
 
-    // @Autowired
-    // private PostService postService;
+    @Autowired
+    private PostService postService;
 
-    // // @Autowired
-    // // PostMapper postMapper;
 
     
 }

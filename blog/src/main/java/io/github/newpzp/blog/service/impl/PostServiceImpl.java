@@ -25,6 +25,9 @@ import io.github.newpzp.blog.service.PostService;
 
 import static io.github.newpzp.blog.domain.entity.table.PostTagTableDef.POST_TAG;
 import static io.github.newpzp.blog.domain.entity.table.TagTableDef.TAG;
+import static io.github.newpzp.blog.domain.entity.table.PostTableDef.POST;
+import static io.github.newpzp.blog.domain.entity.table.CategoryTableDef.CATEGORY;
+
 
 
 @Service("postService")
@@ -133,12 +136,24 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Page<PostDetailsDTO> getPosts(QueryPostDTO queryPostDTO) {
-        Page<Post> postPage = new Page<>(queryPostDTO.getCurrent(), queryPostDTO.getOffset());
-     
-
+    public List<PostDetailsDTO> getPosts(QueryPostDTO queryPostDTO) {
+        QueryWrapper query = QueryWrapper.create()
+                .select(POST.TITLE,POST.CONTENT,POST.CREATED_AT,POST.UPDATED_AT,CATEGORY.NAME.as("categoryName"),TAG.NAME.as("tagName"))
+                .from(POST)
+                .leftJoin(CATEGORY).on(POST.CATEGORY_ID.eq(CATEGORY.ID))
+                .leftJoin(POST_TAG).on(POST.ID.eq(POST_TAG.POST_ID))
+                .leftJoin(TAG).on(POST_TAG.TAG_ID.eq(TAG.ID))
+                .where(POST.CONTENT.like("%"+queryPostDTO.getSearchTxt()+"%"));
+                ;
+        List<PostDetailsDTO> queryList = postMapper.selectListByQueryAs(query,PostDetailsDTO.class);
         
-        return null;
+        return queryList;
+    }
+
+    @Override
+    public Page<PostDetailsDTO> getPostsByPage(QueryPostDTO queryPostDTO) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPostsByPage'");
     }
 
 
